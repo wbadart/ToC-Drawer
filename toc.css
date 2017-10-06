@@ -1,0 +1,32 @@
+.toc-box {
+    bottom: 2em;
+    position: fixed;
+}
+
+.toc-main {
+    background-color: white;
+    border: solid 1px black;
+    border-left: none;
+    border-right: none;
+    border-radius: 0px 4px 0px 0px;
+    padding: 1em;
+}
+
+.toc-tab {
+    background-color: white;
+    border: solid 1px black;
+    border-left: none;
+    border-radius: 0px 4px 4px 0px;
+    bottom: 0;
+    right: -2.1em;
+    padding: 0.5em;
+    position: absolute;
+}
+
+.toc-spacer {
+    border-left: 1px solid black;
+    background-color: red;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
