@@ -13,28 +13,42 @@ var STATES = {shown: 0, hidden: 1};
 function ToC() {
     this.state = STATES.shown;
 
-    var container = document.createElement('aside')
-      , main      = document.createElement('div')
-      , ul        = document.createElement('ul')
-      , spacer    = document.createElement('div')
-      , tab       = document.createElement('div')
-      , icon      = document.createElement('i');
+    this.container = document.createElement('aside');
+    this.main      = document.createElement('div');
+    this.ul        = document.createElement('ul');
+    this.spacer    = document.createElement('div');
+    this.tab       = document.createElement('div');
+    this.icon      = document.createElement('i');
 
-    container.classList.add('toc-box');
-    main.classList.add('toc-main');
-    spacer.classList.add('toc-spacer');
-    tab.classList.add('toc-tab');
-    icon.classList.add('fa', 'fa-list');
+    this.container.classList.add('toc-box');
+    this.main.classList.add('toc-main');
+    this.spacer.classList.add('toc-spacer');
+    this.tab.classList.add('toc-tab');
+    this.icon.classList.add('fa', 'fa-list');
 
-    container.appendChild(main);
-    container.appendChild(spacer);
-    container.appendChild(tab);
-    tab.appendChild(icon);
-    spacer.textContent = '&nbsp;';
+    this.container.appendChild(this.main);
+    this.container.appendChild(this.spacer);
+    this.container.appendChild(this.tab);
+    this.tab.appendChild(this.icon);
+    this.spacer.textContent = '&nbsp;';
+
+    this.tab.onclick = toggle.bind(this);
+
+
+    function toggle() {
+        this.state = STATES.shown
+            ? STATES.hidden
+            : STATES.shown;
+
+        this.container.style.display = this.state === STATES.shown
+            ? 'default'
+            : 'none';
+
+        console.log('TOGGLING');
+    }
 }
 
 window.onload = function() {
-
-
-
+    var toc = new ToC();
+    document.body.appendChild(toc.container);
 }
