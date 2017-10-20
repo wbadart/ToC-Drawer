@@ -7,7 +7,7 @@
  * created: OCT 2017
  **/
 
-var STATES = {shown: 0, hidden: 1};
+var STATES = {shown: 'default', hidden: 'none'};
 
 
 function ToC() {
@@ -36,13 +36,11 @@ function ToC() {
 
 
     function toggle() {
-        this.state = STATES.shown
+        this.state = this.state === STATES.shown
             ? STATES.hidden
             : STATES.shown;
 
-        this.container.style.display = this.state === STATES.shown
-            ? 'default'
-            : 'none';
+        this.container.style.display = this.state;
 
         console.log('TOGGLING');
     }
