@@ -7,12 +7,13 @@
  * created: OCT 2017
  **/
 
-var STATES = {shown: 'default', hidden: 'none'};
+var STATES = {shown: 0, hidden: 1};
 
 
 function ToC() {
     this.state = STATES.shown;
 
+    this.handle =
     this.container = document.createElement('aside');
     this.main      = document.createElement('div');
     this.ul        = document.createElement('ul');
@@ -29,8 +30,18 @@ function ToC() {
     this.container.appendChild(this.main);
     this.container.appendChild(this.spacer);
     this.container.appendChild(this.tab);
+    this.main.appendChild(this.ul);
     this.tab.appendChild(this.icon);
-    this.spacer.textContent = '&nbsp;';
+    this.spacer.innerHTML = '&nbsp;';
+
+    this.articles = Array.from(document.getElementsByClassName('toc-article'));
+    this.articles.forEach((function(article) {
+        Array.from(article.children)
+            .filter(sections)
+            .map(title)
+            .map(li)
+            .forEach(this.ul.appendChild.bind(this.ul));
+    }).bind(this));
 
     this.tab.onclick = toggle.bind(this);
 
@@ -39,14 +50,36 @@ function ToC() {
         this.state = this.state === STATES.shown
             ? STATES.hidden
             : STATES.shown;
+        this.container.style.left = (this.state === STATES.shown
+            ? 0
+            : -this.main.clientWidth) + 'px';
+    }
 
-        this.container.style.display = this.state;
+    function sections(element) {
+        return element.tagName === 'SECTION';
+    }
 
-        console.log('TOGGLING');
+    function title(section) {
+        return section.children[0].textContent.trim();
+    }
+
+    function li(text) {
+        var e = document.createElement('li');
+        e.textContent = text;
+        return e;
+    }
+
+    function compose() {
+        var args = Array.from(arguments);
+        return function(a) {
+            return args.reduce(function(acc, f){ return f(acc) }, a);
+        };
     }
 }
 
 window.onload = function() {
     var toc = new ToC();
-    document.body.appendChild(toc.container);
+    document.body.appendChild(toc.handle);
+    // Uncomment below line if console access to `toc' required for debugging.
+    // window.toc = toc;
 }
