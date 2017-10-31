@@ -35,10 +35,12 @@ function ToC(title_predicate) {
     this.spacer.innerHTML = '&nbsp;';
 
     this.articles = Array.from(document.getElementsByClassName('toc-article'));
+    var text_getter = get('textContent');
     this.articles.forEach((function(article, i, articles) {
         flattree(article)
             .filter(title_predicate)
-            .map(get('textContent'))
+            .map(add_ids.bind(null, text_getter))
+            .map(text_getter)
             .map(li)
             .forEach(this.ul.appendChild.bind(this.ul));
         if(i < articles.length - 1)
@@ -58,9 +60,18 @@ function ToC(title_predicate) {
             : -this.main.clientWidth) + 'px';
     }
 
+    function add_ids(text_getter, e) {
+        e.id = text_to_id(text_getter(e));
+        return e;
+    }
+
     function li(text) {
-        var e = document.createElement('li');
-        e.textContent = text;
+        var e = document.createElement('li')
+          , t = document.createElement('span');
+        t.textContent = text;
+        e.appendChild(t);
+        e.onclick = function() {
+            document.querySelector('#' + text_to_id(text)).scrollIntoView({behavior: 'smooth'}) };
         return e;
     }
 
@@ -71,7 +82,20 @@ function ToC(title_predicate) {
         function haschildren(e) { return e.children.length !== 0 }
     }
 
-    function get(attr) {
-        return function(obj) { return obj[attr] };
+    function text_to_id(text) {
+        return text
+            .replace(/[']/g, '')
+            .replace(/\W/g, ' ')
+            .split(/\s/)
+            .map(capitalize)
+            .join('');
     }
+
+    function capitalize(w) { return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase() }
+    function get(attr) { return function(obj) { return obj[attr] } }
+}
+
+window.onload = function() {
+    var toc = new ToC();
+    document.body.appendChild(toc.handle);
 }
