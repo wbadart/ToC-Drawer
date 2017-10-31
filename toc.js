@@ -73,10 +73,3 @@ function ToC(title_predicate) {
         return function(obj) { return obj[attr] };
     }
 }
-
-window.onload = function() {
-    var toc = new ToC();
-    document.body.appendChild(toc.handle);
-    // Uncomment below line if console access to `toc' required for debugging.
-    // window.toc = toc;
-}
