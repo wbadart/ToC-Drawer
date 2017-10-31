@@ -7,10 +7,10 @@
  * created: OCT 2017
  **/
 
-var STATES = {shown: 0, hidden: 1};
 
-
-function ToC() {
+function ToC(title_predicate) {
+    title_predicate = title_predicate || function(e) { return e.tagName === 'H2' };
+    var STATES = {shown: 0, hidden: 1};
     this.state = STATES.shown;
 
     this.handle =
@@ -36,13 +36,14 @@ function ToC() {
 
     this.articles = Array.from(document.getElementsByClassName('toc-article'));
     this.articles.forEach((function(article) {
-        Array.from(article.children)
-            .filter(sections)
-            .map(title)
+        flattree(article)
+            .filter(title_predicate)
+            .map(get('textContent'))
             .map(li)
             .forEach(this.ul.appendChild.bind(this.ul));
     }).bind(this));
 
+    this.container.style.left = this.main.clientWidth;
     this.tab.onclick = toggle.bind(this);
 
 
@@ -55,25 +56,21 @@ function ToC() {
             : -this.main.clientWidth) + 'px';
     }
 
-    function sections(element) {
-        return element.tagName === 'SECTION';
-    }
-
-    function title(section) {
-        return section.children[0].textContent.trim();
-    }
-
     function li(text) {
         var e = document.createElement('li');
         e.textContent = text;
         return e;
     }
 
-    function compose() {
-        var args = Array.from(arguments);
-        return function(a) {
-            return args.reduce(function(acc, f){ return f(acc) }, a);
-        };
+    function flattree(e) {
+        return Array.from(e.children).reduce(function(result, child) {
+            return result.concat(haschildren(child) ? flattree(child) : [child]);
+        }, []).concat([e])
+        function haschildren(e) { return e.children.length !== 0 }
+    }
+
+    function get(attr) {
+        return function(obj) { return obj[attr] };
     }
 }
 
