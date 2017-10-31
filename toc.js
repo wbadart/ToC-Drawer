@@ -35,12 +35,14 @@ function ToC(title_predicate) {
     this.spacer.innerHTML = '&nbsp;';
 
     this.articles = Array.from(document.getElementsByClassName('toc-article'));
-    this.articles.forEach((function(article) {
+    this.articles.forEach((function(article, i, articles) {
         flattree(article)
             .filter(title_predicate)
             .map(get('textContent'))
             .map(li)
             .forEach(this.ul.appendChild.bind(this.ul));
+        if(i < articles.length - 1)
+            this.ul.appendChild(document.createElement('hr'));
     }).bind(this));
 
     this.container.style.left = this.main.clientWidth;
