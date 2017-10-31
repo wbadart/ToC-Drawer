@@ -13,6 +13,15 @@
     padding: 1em;
 }
 
+.toc-main li {
+    cursor: pointer;
+}
+
+.toc-main li span {
+    color: rgb(51, 122, 183);
+    text-decoration: underline;
+}
+
 .toc-tab {
     background-color: white;
     border: solid 1px black;
