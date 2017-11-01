@@ -7,12 +7,12 @@
  * created: OCT 2017
  **/
 
-function ToC(header, title_predicate) {
-    header = header || 'Table of Contents';
-    title_predicate = title_predicate || default_title_predicate;
+var TOC_STATES = {shown: 0, hidden: 1};
 
-    var STATES = {shown: 0, hidden: 1};
-    this.state = STATES.shown;
+
+function ToC(config) {
+    config = config || {};
+    this.state = config.start_state || TOC_STATES.shown;
 
     this.handle =
     this.container = document.createElement('aside');
@@ -35,14 +35,14 @@ function ToC(header, title_predicate) {
     this.main.appendChild(this.title);
     this.main.appendChild(this.ul);
     this.tab.appendChild(this.icon);
-    this.title.textContent = header;
+    this.title.textContent = config.header || 'Table of Contents';
     this.spacer.innerHTML = '&nbsp;';
 
     var text_getter = get('textContent');
     this.articles = Array.from(document.getElementsByClassName('toc-article'));
     this.articles.forEach((function(article, i, articles) {
         flattree(article)
-            .filter(title_predicate)
+            .filter(config.title_predicate || default_title_predicate)
             .map(add_ids.bind(null, text_getter))
             .map(text_getter)
             .map(li)
@@ -55,10 +55,10 @@ function ToC(header, title_predicate) {
 
 
     function toggle() {
-        this.state = this.state === STATES.shown
-            ? STATES.hidden
-            : STATES.shown;
-        this.container.style.left = (this.state === STATES.shown
+        this.state = this.state === TOC_STATES.shown
+            ? TOC_STATES.hidden
+            : TOC_STATES.shown;
+        this.container.style.left = (this.state === TOC_STATES.shown
             ? 0
             : -this.main.clientWidth) + 'px';
     }
