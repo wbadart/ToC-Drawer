@@ -7,7 +7,8 @@
  * created: OCT 2017
  **/
 
-function ToC(title_predicate) {
+function ToC(header, title_predicate) {
+    header = header || 'Table of Contents';
     title_predicate = title_predicate || default_title_predicate;
 
     var STATES = {shown: 0, hidden: 1};
@@ -16,7 +17,7 @@ function ToC(title_predicate) {
     this.handle =
     this.container = document.createElement('aside');
     this.main      = document.createElement('div');
-    this.title     = document.createElement('h4');
+    this.title     = document.createElement('h6');
     this.ul        = document.createElement('ul');
     this.spacer    = document.createElement('div');
     this.tab       = document.createElement('div');
@@ -34,7 +35,7 @@ function ToC(title_predicate) {
     this.main.appendChild(this.title);
     this.main.appendChild(this.ul);
     this.tab.appendChild(this.icon);
-    this.title.textContent = 'Table of Contents'
+    this.title.textContent = header;
     this.spacer.innerHTML = '&nbsp;';
 
     var text_getter = get('textContent');
