@@ -7,15 +7,16 @@
  * created: OCT 2017
  **/
 
-
 function ToC(title_predicate) {
-    title_predicate = title_predicate || function(e) { return e.tagName === 'H2' };
+    title_predicate = title_predicate || default_title_predicate;
+
     var STATES = {shown: 0, hidden: 1};
     this.state = STATES.shown;
 
     this.handle =
     this.container = document.createElement('aside');
     this.main      = document.createElement('div');
+    this.title     = document.createElement('h4');
     this.ul        = document.createElement('ul');
     this.spacer    = document.createElement('div');
     this.tab       = document.createElement('div');
@@ -30,21 +31,22 @@ function ToC(title_predicate) {
     this.container.appendChild(this.main);
     this.container.appendChild(this.spacer);
     this.container.appendChild(this.tab);
+    this.main.appendChild(this.title);
     this.main.appendChild(this.ul);
     this.tab.appendChild(this.icon);
+    this.title.textContent = 'Table of Contents'
     this.spacer.innerHTML = '&nbsp;';
 
-    this.articles = Array.from(document.getElementsByClassName('toc-article'));
     var text_getter = get('textContent');
+    this.articles = Array.from(document.getElementsByClassName('toc-article'));
     this.articles.forEach((function(article, i, articles) {
         flattree(article)
             .filter(title_predicate)
             .map(add_ids.bind(null, text_getter))
             .map(text_getter)
             .map(li)
+            .concat(!last(i, articles) ? [document.createElement('hr')] : [])
             .forEach(this.ul.appendChild.bind(this.ul));
-        if(i < articles.length - 1)
-            this.ul.appendChild(document.createElement('hr'));
     }).bind(this));
 
     this.container.style.left = this.main.clientWidth;
@@ -93,9 +95,6 @@ function ToC(title_predicate) {
 
     function capitalize(w) { return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase() }
     function get(attr) { return function(obj) { return obj[attr] } }
-}
-
-window.onload = function() {
-    var toc = new ToC();
-    document.body.appendChild(toc.handle);
+    function last(index, arr) { return index === arr.length - 1 }
+    function default_title_predicate (e) { return e.tagName === 'H2' };
 }
