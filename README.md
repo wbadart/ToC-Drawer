@@ -4,7 +4,7 @@ Simple, togglable, flexible table of contents widget. ToC-Drawer is extremely li
 
 ## Usage
 
-Include [`toc.css`](css-raw) and [`toc.js`](js-raw) into your HTML file. In another script, create your `ToC` and append it to the page by its handle:
+Include [`toc.css`][css-raw] and [`toc.js`][js-raw] into your HTML file. In another script, create your `ToC` and append it to the page by its handle:
 
     var toc = new ToC();
     document.body.appendChild(toc.handle);
