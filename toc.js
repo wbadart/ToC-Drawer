@@ -21,9 +21,8 @@ function ToC(usr_config) {
         start_state: TOC_STATES.shown,
         header: 'Table of Contents',
         title_selector: 'h2',
+        position: 'bottom',
     }, usr_config);
-
-    this.state = config.start_state;
 
 
     //====================
@@ -35,14 +34,13 @@ function ToC(usr_config) {
     this.main      = document.createElement('div');
     this.title     = document.createElement('h6');
     this.ul        = document.createElement('ul');
-    this.spacer    = document.createElement('div');
     this.tab       = document.createElement('div');
     this.icon      = document.createElement('i');
 
     this.container.appendChild(this.main);
-    // this.container.appendChild(this.spacer);
     this.container.appendChild(this.tab);
-    this.main.appendChild(this.title);
+    if(config.header)
+        this.main.appendChild(this.title);
     this.main.appendChild(this.ul);
     this.tab.appendChild(this.icon);
 
@@ -53,16 +51,19 @@ function ToC(usr_config) {
 
     this.container.classList.add('toc-box');
     this.main.classList.add('toc-main');
-    this.spacer.classList.add('toc-spacer');
     this.tab.classList.add('toc-tab');
     this.icon.classList.add('fa', 'fa-list');
-
     this.title.textContent = config.header;
-    this.spacer.innerHTML = '&nbsp;';
+
+
+    //=========================================
+    // Scan articles for headers, populate ToC
+    //=========================================
 
     var text_getter = get('textContent');
     this.articles = Array.from(
         document.getElementsByClassName('toc-article'));
+
     this.articles.forEach((function(article, i, articles) {
         var this_class = 'toc-article' + i;
         article.classList.add(this_class);
@@ -76,14 +77,28 @@ function ToC(usr_config) {
                 ? [document.createElement('hr')]
                 : [])
             .forEach(this.ul.appendChild.bind(this.ul));
-
     }).bind(this));
 
-    this.container.style.left = this.main.clientWidth;
-    this.tab.onclick = toggle.bind(this);
 
+    //======================================
+    // Some initial config, computed styles
+    //======================================
+
+    this.state = config.start_state;
+    this.tab.onclick = toggle.bind(this);
+    this.container.style.left = get_css_left(
+        this.state, this.main.clientWidth);
+
+    this.container.style[config.position] = '2em';
+    this.tab.style[config.position] = '0';
+
+
+    //==================
+    // Helper functions
+    //==================
 
     function toggle() {
+        // Switch this.state and move widget
         this.state = this.state === TOC_STATES.shown
             ? TOC_STATES.hidden
             : TOC_STATES.shown;
@@ -92,17 +107,21 @@ function ToC(usr_config) {
     }
 
     function get_css_left(state, box_width) {
+        // Compute left position of widget based on state
         return (state == TOC_STATES.shown
             ? 0
+            // Add 1 to hide this.main right border
             : -(box_width + 1)) + 'px';
     }
 
     function add_ids(text_getter, e) {
+        // Apply an id to element e based on some text
         e.id = text_to_id(text_getter(e));
         return e;
     }
 
     function li(text) {
+        // Wrap some text in a span and li
         var e = document.createElement('li')
           , t = document.createElement('span');
         t.textContent = text;
@@ -115,6 +134,7 @@ function ToC(usr_config) {
     }
 
     function text_to_id(text) {
+        // Turn a string into a friendly looking CSS id
         return text
             .replace(/[']/g, '')
             .replace(/\W/g, ' ')
