@@ -65,20 +65,10 @@ function ToC(usr_config) {
     this.articles = Array.from(
         document.getElementsByClassName('toc-article'));
 
-    this.articles.forEach((function(article, i, articles) {
-        var this_class = 'toc-article' + i;
-        article.classList.add(this_class);
-
-        Array.from(document.querySelectorAll(
-                '.' + this_class + ' ' + config.title_selector))
-            .map(add_ids.bind(null, text_getter))
-            .map(text_getter)
-            .map(li)
-            .concat(!last(i, articles)
-                ? [document.createElement('hr')]
-                : [])
-            .forEach(this.ul.appendChild.bind(this.ul));
-    }).bind(this));
+    // Wrap in promise so main.clientWidth is accurate (will
+    // be 0 if read before listing populated)
+    var render = Promise.all(
+        this.articles.map(gen_listing.bind(this)));
 
 
     //======================================
@@ -87,17 +77,39 @@ function ToC(usr_config) {
 
     this.state = config.start_state;
     this.tab.onclick = toggle.bind(this);
-    this.container.style.left = get_css_left(
-        this.state, this.main.clientWidth);
 
     this.container.style[config.position] = '2em';
     this.main.style.borderRadius = gen_borders(config.position);
     this.tab.style[config.position] = '0';
 
+    render.then((function() {
+        this.container.style.left = get_css_left(
+            this.state, this.main.clientWidth)
+    }).bind(this));
+
 
     //==================
     // Helper functions
     //==================
+
+    function gen_listing(article, i, articles) {
+        // Scan page for headers and append to toc ul
+        return new Promise((function(resolve, reject) {
+            var this_class = 'toc-article' + i;
+            article.classList.add(this_class);
+            Array.from(document.querySelectorAll(
+                    '.' + this_class + ' '
+                        + config.title_selector))
+                .map(add_ids.bind(null, text_getter))
+                .map(text_getter)
+                .map(li)
+                .concat(!last(i, articles)
+                    ? [document.createElement('hr')]
+                    : [])
+                .forEach(this.ul.appendChild.bind(this.ul));
+            resolve();
+        }).bind(this));
+    }
 
     function toggle() {
         // Switch this.state and move widget
