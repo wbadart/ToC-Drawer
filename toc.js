@@ -7,7 +7,8 @@
  * created: OCT 2017
  **/
 
-var TOC_STATES = {shown: 0, hidden: 1};
+var TOC_STATES = {shown: 0, hidden: 1}
+  , TOC_POSITIONS = {top: 'top', bottom: 'bottom'};
 
 
 function ToC(usr_config) {
@@ -18,10 +19,10 @@ function ToC(usr_config) {
 
     var config = Object.assign({
         // Default settings
-        start_state: TOC_STATES.shown,
-        header: 'Table of Contents',
+        start_state:    TOC_STATES.shown,
+        position:       TOC_POSITIONS.bottom,
+        header:         'Table of Contents',
         title_selector: 'h2',
-        position: 'bottom',
     }, usr_config);
 
 
@@ -90,6 +91,7 @@ function ToC(usr_config) {
         this.state, this.main.clientWidth);
 
     this.container.style[config.position] = '2em';
+    this.main.style.borderRadius = gen_borders(config.position);
     this.tab.style[config.position] = '0';
 
 
@@ -112,6 +114,16 @@ function ToC(usr_config) {
             ? 0
             // Add 1 to hide this.main right border
             : -(box_width + 1)) + 'px';
+    }
+
+    function gen_borders(position) {
+        // Compute the border radius values for the main box
+        return [
+            0,
+            position === TOC_POSITIONS.top ? 0 : 4,
+            position === TOC_POSITIONS.top ? 4 : 0,
+            0
+        ].map(function(n) { return n + 'px' }).join(' ');
     }
 
     function add_ids(text_getter, e) {
@@ -143,7 +155,8 @@ function ToC(usr_config) {
             .join('');
     }
 
-    function capitalize(w) { return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase() }
     function get(attr) { return function(obj) { return obj[attr] } }
     function last(index, arr) { return index === arr.length - 1 }
+    function capitalize(w) {
+        return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase() }
 }

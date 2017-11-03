@@ -1,8 +1,20 @@
+/**
+ * toc.css
+ *
+ * Default styles for ToC widget. Feel free
+ * to override. Looks good w/ Bootstrap.
+ *
+ * Will Badart <wbadart@live.com>
+ * created: OCT 2017
+ */
+
+/* Widget container */
 .toc-box {
     position: fixed;
     transition: 0.4s;
 }
 
+/* Widget body; contains header listing */
 .toc-main {
     background-color: white;
     border: solid 1px black;
@@ -10,15 +22,18 @@
     padding: 1em;
 }
 
+/* Header listing */
 .toc-main li {
     cursor: pointer;
 }
 
+/* Wraps the text of each listing */
 .toc-main li span {
     color: rgb(51, 122, 183);
     text-decoration: underline;
 }
 
+/* The little side nugget with the icon */
 .toc-tab {
     background-color: white;
     border: solid 1px black;
