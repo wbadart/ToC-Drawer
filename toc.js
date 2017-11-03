@@ -23,6 +23,7 @@ function ToC(usr_config) {
         position:       TOC_POSITIONS.bottom,
         header:         'Table of Contents',
         title_selector: 'h2',
+        ordered:        false,
     }, usr_config);
 
 
@@ -34,7 +35,7 @@ function ToC(usr_config) {
     this.container = document.createElement('aside');
     this.main      = document.createElement('div');
     this.title     = document.createElement('h6');
-    this.ul        = document.createElement('ul');
+    this.listing   = document.createElement(config.ordered ? 'ol' : 'ul');
     this.tab       = document.createElement('div');
     this.icon      = document.createElement('i');
 
@@ -42,7 +43,7 @@ function ToC(usr_config) {
     this.container.appendChild(this.tab);
     if(config.header)
         this.main.appendChild(this.title);
-    this.main.appendChild(this.ul);
+    this.main.appendChild(this.listing);
     this.tab.appendChild(this.icon);
 
 
@@ -106,7 +107,7 @@ function ToC(usr_config) {
                 .concat(!last(i, articles)
                     ? [document.createElement('hr')]
                     : [])
-                .forEach(this.ul.appendChild.bind(this.ul));
+                .forEach(this.listing.appendChild.bind(this.listing));
             resolve();
         }).bind(this));
     }
