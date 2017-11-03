@@ -35,6 +35,9 @@ The `ToC` constructor accepts up to one argument, a configuration object. Below 
 
     // CSS selector for which children of `.toc-article's should yield a header
     title_selector: 'h2',
+
+    // Whether to use ordered or unordered lists in the widget
+    ordered: false,
 }
 ```
 
