@@ -47,7 +47,12 @@ The most modern features ToC-Drawer uses are [promises][promise] and the [`Objec
 
 ## Future Plans
 
-In the future, I plan to provide more configuration options, particularly for styling. For the time being, the "style API" can be pretty well approximated by the provided CSS file (i.e. you can customize your widget by overriding the rules found in `toc.css`).
+In the future, I plan to provide more configuration options, particularly for styling. For the time being, the "style API" can be pretty well approximated by the provided CSS file (i.e. you can customize your widget by overriding the rules found in `toc.css`). For instance, to lighten the border color:
+
+```
+.toc-main { border-color: rgb(221, 221, 221) }
+.toc-tab { border-color: rgb(221, 221, 221) }
+```
 
 ## License
 
