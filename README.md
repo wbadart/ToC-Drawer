@@ -1,6 +1,6 @@
 # ToC-Drawer
 
-Simple, togglable, flexible table of contents widget. ToC-Drawer is extremely lightweight; its only dependency is [Font Awesome][font-awesome] and the driver JS file *unminified* is only 4K.
+Simple, togglable, flexible table of contents widget. ToC-Drawer is extremely lightweight; its only dependency is [Font Awesome][font-awesome] and the driver JS file *unminified* is only 8K.
 
 ## Usage
 
