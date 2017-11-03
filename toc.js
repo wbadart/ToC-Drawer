@@ -35,7 +35,7 @@ function ToC(usr_config) {
     this.container = document.createElement('aside');
     this.main      = document.createElement('div');
     this.title     = document.createElement('h6');
-    this.listing   = document.createElement(config.ordered ? 'ol' : 'ul');
+    this.listings  = document.createElement('div');
     this.tab       = document.createElement('div');
     this.icon      = document.createElement('i');
 
@@ -43,7 +43,7 @@ function ToC(usr_config) {
     this.container.appendChild(this.tab);
     if(config.header)
         this.main.appendChild(this.title);
-    this.main.appendChild(this.listing);
+    this.main.appendChild(this.listings);
     this.tab.appendChild(this.icon);
 
 
@@ -104,10 +104,13 @@ function ToC(usr_config) {
                 .map(add_ids.bind(null, text_getter))
                 .map(text_getter)
                 .map(li)
+                .reduce(tolist, [document.createElement(
+                    config.ordered ? 'ol' : 'ul')])
                 .concat(!last(i, articles)
                     ? [document.createElement('hr')]
                     : [])
-                .forEach(this.listing.appendChild.bind(this.listing));
+                .forEach(
+                    this.listings.appendChild.bind(this.listings));
             resolve();
         }).bind(this));
     }
@@ -156,6 +159,13 @@ function ToC(usr_config) {
                 .scrollIntoView({behavior: 'smooth'})
         };
         return e;
+    }
+
+    function tolist(list, li) {
+        // Fold a series of li's into a list. List wrapped in array to
+        // fit into get_listing pipeline.
+        list[0].appendChild(li);
+        return list;
     }
 
     function text_to_id(text) {
