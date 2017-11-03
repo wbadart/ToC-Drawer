@@ -22,16 +22,9 @@
     padding: 1em;
 }
 
-/* Header listing */
-.toc-main li {
-    cursor: pointer;
-}
-
-/* Wraps the text of each listing */
-.toc-main li span {
-    color: rgb(51, 122, 183);
-    text-decoration: underline;
-}
+/* Emulates anchor styling */
+.toc-link { cursor: pointer }
+.toc-link:hover { color: rgb(51, 122, 183) }
 
 /* The little side nugget with the icon */
 .toc-tab {
@@ -44,3 +37,7 @@
     cursor: pointer;
     position: absolute;
 }
+
+/* Optional link to top of page */
+.toc-top { margin: 0.7em 0 0 0 }
+.toc-top i { margin-right: 0.2em }

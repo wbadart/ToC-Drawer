@@ -38,6 +38,9 @@ The `ToC` constructor accepts up to one argument, a configuration object. Below 
 
     // Whether to use ordered or unordered lists in the widget
     ordered: false,
+
+    // Add a link at the bottom of the widget to scroll to top
+    link_top: false,
 }
 ```
 

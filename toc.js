@@ -24,6 +24,7 @@ function ToC(usr_config) {
         header:         'Table of Contents',
         title_selector: 'h2',
         ordered:        false,
+        link_top:       false,
     }, usr_config);
 
 
@@ -39,11 +40,19 @@ function ToC(usr_config) {
     this.tab       = document.createElement('div');
     this.icon      = document.createElement('i');
 
+    this.toplink   = document.createElement('p');
+    this.toplink_t = document.createElement('span');
+    this.toplink_i = document.createElement('i');
+
     this.container.appendChild(this.main);
     this.container.appendChild(this.tab);
     if(config.header)
         this.main.appendChild(this.title);
     this.main.appendChild(this.listings);
+    if(config.link_top)
+        this.main.appendChild(this.toplink);
+    this.toplink.appendChild(this.toplink_t);
+    this.toplink_t.appendChild(this.toplink_i);
     this.tab.appendChild(this.icon);
 
 
@@ -56,6 +65,14 @@ function ToC(usr_config) {
     this.tab.classList.add('toc-tab');
     this.icon.classList.add('fa', 'fa-list');
     this.title.textContent = config.header;
+
+    this.toplink.classList.add('toc-top');
+    this.toplink.onclick = function() {
+        document.body.scrollIntoView({behavior: 'smooth'}) }
+
+    this.toplink_t.classList.add('toc-link');
+    this.toplink_i.classList.add('fa', 'fa-arrow-up');
+    this.toplink_t.appendChild(document.createTextNode('Top'));
 
 
     //=========================================
@@ -153,6 +170,7 @@ function ToC(usr_config) {
         var e = document.createElement('li')
           , t = document.createElement('span');
         t.textContent = text;
+        t.classList.add('toc-link');
         e.appendChild(t);
         e.onclick = function() {
             document.querySelector('#' + text_to_id(text))
