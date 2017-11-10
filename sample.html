@@ -14,7 +14,17 @@
         href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="./toc.css">
     <style>ul{ margin-bottom: 0; }</style>
+    <!-- <script -->
+    <!--       src="http://code.jquery.com/jquery-3.2.1.min.js" -->
+    <!--       integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" -->
+    <!--       crossorigin="anonymous"></script> -->
+    <script
+          src="http://code.jquery.com/jquery-1.12.4.js"
+          integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU="
+          crossorigin="anonymous">
+    </script>
     <script src="./toc.js"></script>
+    <script src="./toc.jquery.js"></script>
 </head>
 <body>
     <main class="container"><br>
@@ -74,12 +84,17 @@
         </article>
     </main>
 
+    <section class="toc-article">
+        <h2>asdf</h2>
+    </section>
+
     <script>
         var toc = new ToC({
             position: TOC_POSITIONS.top,
             link_top: true,
         });
         document.body.appendChild(toc.handle);
+        $('.toc-article').toc();
     </script>
 
 </body>
