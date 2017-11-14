@@ -41,6 +41,9 @@ The `ToC` constructor accepts up to one argument, a configuration object. Below 
 
     // Add a link at the bottom of the widget to scroll to top
     link_top: false,
+
+    // How much breathing room to give the widget (must be a string, like you would put in a CSS rule)
+    margin: '2em',
 }
 ```
 

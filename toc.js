@@ -19,12 +19,13 @@ function ToC(usr_config) {
 
     var config = Object.assign({
         // Default settings
-        start_state:    TOC_STATES.shown,
-        position:       TOC_POSITIONS.bottom,
         header:         'Table of Contents',
-        title_selector: 'h2',
-        ordered:        false,
         link_top:       false,
+        margin:         '2em',
+        ordered:        false,
+        position:       TOC_POSITIONS.bottom,
+        start_state:    TOC_STATES.shown,
+        title_selector: 'h2',
     }, usr_config);
 
 
@@ -96,7 +97,7 @@ function ToC(usr_config) {
     this.state = config.start_state;
     this.tab.onclick = toggle.bind(this);
 
-    this.container.style[config.position] = '2em';
+    this.container.style[config.position] = config.margin;
     this.main.style.borderRadius = gen_borders(config.position);
     this.tab.style[config.position] = '0';
 
