@@ -26,6 +26,7 @@ function ToC(usr_config) {
         position:       TOC_POSITIONS.bottom,
         start_state:    TOC_STATES.shown,
         title_selector: 'h2',
+        top_target:     document.body,
     }, usr_config);
 
 
@@ -69,7 +70,7 @@ function ToC(usr_config) {
 
     this.toplink.classList.add('toc-top');
     this.toplink.onclick = function() {
-        document.body.scrollIntoView({behavior: 'smooth'}) }
+        config.top_target.scrollIntoView({behavior: 'smooth'}) }
 
     this.toplink_t.classList.add('toc-link');
     this.toplink_i.classList.add('fa', 'fa-arrow-up');
