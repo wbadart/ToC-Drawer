@@ -26,7 +26,7 @@ function ToC(usr_config) {
         position:       TOC_POSITIONS.bottom,
         start_state:    TOC_STATES.shown,
         title_selector: 'h2',
-        top_target:     document.body,
+        hack:           undefined,
     }, usr_config);
 
 
@@ -69,8 +69,7 @@ function ToC(usr_config) {
     this.title.textContent = config.header;
 
     this.toplink.classList.add('toc-top');
-    this.toplink.onclick = function() {
-        config.top_target.scrollIntoView({behavior: 'smooth'}) }
+    this.toplink.onclick = scrollToTop.bind(null, 100);
 
     this.toplink_t.classList.add('toc-link');
     this.toplink_i.classList.add('fa', 'fa-arrow-up');
@@ -101,6 +100,22 @@ function ToC(usr_config) {
     this.container.style[config.position] = config.margin;
     this.main.style.borderRadius = gen_borders(config.position);
     this.tab.style[config.position] = '0';
+
+
+    //============================
+    // Hack to clear fixed navbar
+    //============================
+
+    if(config.hack && config.position === TOC_POSITIONS.top) {
+        var navbar = document.querySelector(config.hack);
+        this.container.style.top = navbar.clientHeight + 20 + 'px';
+        console.log(this.container.style.top);
+    }
+
+
+    //============================
+    // Post-render initialization
+    //============================
 
     render.then((function() {
         this.container.style.left = get_css_left(
@@ -202,4 +217,22 @@ function ToC(usr_config) {
     function last(index, arr) { return index === arr.length - 1 }
     function capitalize(w) {
         return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase() }
+}
+
+function scrollToTop(scrollDuration) {
+    // See: https://stackoverflow.com/questions/21474678/scrolltop-animation-without-jquery
+    var scrollHeight = window.scrollY
+      , scrollStep = Math.PI / ( scrollDuration / 15 )
+      , cosParameter = scrollHeight / 2;
+
+    var scrollCount = 0
+      , scrollMargin;
+
+    var scrollInterval = setInterval(function() {
+        if (window.scrollY != 0) {
+            scrollCount = scrollCount + 1;
+            scrollMargin = cosParameter - cosParameter * Math.cos(scrollCount * scrollStep);
+            window.scrollTo(0, (scrollHeight - scrollMargin));
+        } else clearInterval(scrollInterval);
+    }, 15 );
 }
